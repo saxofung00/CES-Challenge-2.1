@@ -1,0 +1,1770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MR. TSANG'S CES CHALLENGE — 公民、經濟與社會科互動挑戰賽 | S2 Module 2.1</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts for Retro Pixel & Clean Bilingual Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;700;900&family=Press+Start+2P&family=Inter:wght@600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Custom Retro Arcade Styling */
+        :root {
+            --chalkboard-bg: #143627;
+            --chalkboard-border: #8b5a2b;
+            --arcade-yellow: #ffd700;
+            --arcade-red: #ff3b30;
+            --arcade-cyan: #00f0ff;
+        }
+
+        body {
+            font-family: 'Inter', 'Noto Sans TC', sans-serif;
+            background-color: #0b0e14;
+            color: #ffffff;
+            overflow-x: hidden;
+            user-select: none;
+        }
+
+        .font-pixel {
+            font-family: 'Press Start 2P', 'Noto Sans TC', monospace;
+        }
+
+        .font-tc {
+            font-family: 'Noto Sans TC', sans-serif;
+        }
+
+        /* Subtle CRT Scanline Overlay - strictly pointer-events: none so it never blocks clicks */
+        .crt-overlay {
+            background: linear-gradient(
+                rgba(18, 16, 16, 0) 50%, 
+                rgba(0, 0, 0, 0.25) 50%
+            ), linear-gradient(
+                90deg,
+                rgba(255, 0, 0, 0.03),
+                rgba(0, 255, 0, 0.01),
+                rgba(0, 0, 255, 0.03)
+            );
+            background-size: 100% 4px, 6px 100%;
+            pointer-events: none !important;
+        }
+
+        /* Chalkboard Classroom Container */
+        .chalkboard-panel {
+            background: radial-gradient(circle at center, #1b4734 0%, #102b1f 100%);
+            border: 8px solid #7c4d25;
+            box-shadow: 
+                inset 0 0 30px rgba(0, 0, 0, 0.7),
+                0 10px 25px rgba(0, 0, 0, 0.8),
+                0 0 0 3px #4a2c11;
+        }
+
+        /* Arcade Push Button 3D Effect */
+        .arcade-btn {
+            transition: transform 0.08s ease, box-shadow 0.08s ease;
+            box-shadow: 0 5px 0 #991b1b, 0 8px 15px rgba(0,0,0,0.5);
+            position: relative;
+            z-index: 30;
+        }
+        .arcade-btn:active:not(:disabled) {
+            transform: translateY(4px);
+            box-shadow: 0 1px 0 #991b1b, 0 2px 5px rgba(0,0,0,0.5);
+        }
+
+        .arcade-btn-yellow {
+            transition: transform 0.08s ease, box-shadow 0.08s ease;
+            box-shadow: 0 5px 0 #b45309, 0 8px 15px rgba(0,0,0,0.5);
+            position: relative;
+            z-index: 30;
+        }
+        .arcade-btn-yellow:active:not(:disabled) {
+            transform: translateY(4px);
+            box-shadow: 0 1px 0 #b45309, 0 2px 5px rgba(0,0,0,0.5);
+        }
+
+        .arcade-btn-option {
+            transition: all 0.1s ease;
+            box-shadow: 0 4px 0 #1e293b;
+            position: relative;
+            z-index: 25;
+        }
+        .arcade-btn-option:hover:not(:disabled) {
+            transform: translateY(-2px);
+            border-color: #ffd700;
+            background-color: #1e293b;
+        }
+        .arcade-btn-option:active:not(:disabled) {
+            transform: translateY(3px);
+            box-shadow: 0 1px 0 #1e293b;
+        }
+
+        /* Blinking Start Text */
+        @keyframes blink {
+            0%, 49% { opacity: 1; }
+            50%, 100% { opacity: 0.35; }
+        }
+        .animate-blink {
+            animation: blink 1.1s infinite;
+            pointer-events: none;
+        }
+
+        /* Stamp Pop Animation for 正解 */
+        @keyframes stampPop {
+            0% { transform: scale(2.2) rotate(-12deg); opacity: 0; }
+            70% { transform: scale(0.95) rotate(-4deg); opacity: 1; }
+            100% { transform: scale(1) rotate(-4deg); opacity: 1; }
+        }
+        .animate-stamp {
+            animation: stampPop 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        /* Shake Animation on Wrong Answer */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-8px); }
+            40%, 80% { transform: translateX(8px); }
+        }
+        .animate-shake {
+            animation: shake 0.4s ease-in-out;
+        }
+
+        /* Hand-drawn Q-Version Doodle Mascot Animations */
+        @keyframes mascotBounce {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-5px) rotate(1.5deg); }
+        }
+        .animate-mascot-idle {
+            animation: mascotBounce 2.2s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes mascotCheer {
+            0% { transform: scale(0.9) rotate(-4deg); }
+            40% { transform: scale(1.08) rotate(3deg); }
+            70% { transform: scale(0.98) rotate(-2deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
+        .animate-mascot-cheer {
+            animation: mascotCheer 0.55s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            pointer-events: none;
+        }
+
+        @keyframes sparkleTwinkle {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.45; transform: scale(0.82); }
+        }
+        .doodle-sparkle {
+            transform-origin: center;
+            animation: sparkleTwinkle 1.4s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-between p-2 sm:p-4 relative">
+
+    <!-- CRT Scanline Layer (Toggleable, strictly non-blocking) -->
+    <div id="crt-layer" class="crt-overlay fixed inset-0 z-40 pointer-events-none"></div>
+
+    <!-- Top Classroom Header Bar -->
+    <header class="w-full max-w-4xl flex flex-wrap items-center justify-between gap-2 bg-slate-900/95 border-2 border-slate-700 rounded-xl px-3 py-2 z-20 shadow-lg">
+        <div class="flex items-center gap-2">
+            <span class="bg-red-600 text-white font-pixel text-[10px] sm:text-xs px-2 py-1 rounded">S2 CES</span>
+            <h1 class="font-tc font-black text-sm sm:text-base text-yellow-400 tracking-wide">
+                MR. TSANG'S CES CHALLENGE <span class="text-cyan-300 text-xs sm:text-sm font-bold hidden md:inline">| 公民、經濟與社會科互動挑戰賽</span>
+            </h1>
+        </div>
+
+        <div class="flex items-center gap-1.5 sm:gap-2">
+            <!-- JS Status Indicator -->
+            <span id="js-status-pill" class="text-[10px] font-pixel px-2 py-1 rounded bg-emerald-950 border border-emerald-500/60 text-emerald-400">
+                ● READY
+            </span>
+
+            <!-- Custom Avatar Photo Upload Button -->
+            <label for="avatar-upload-input" class="text-xs font-tc font-bold px-2.5 py-1.5 rounded-lg bg-emerald-900/80 hover:bg-emerald-800 border border-emerald-400/60 text-emerald-200 transition cursor-pointer flex items-center gap-1" title="Upload custom photo for Mr Tsang">
+                <span>🖼️ 換頭像</span>
+            </label>
+            <input id="avatar-upload-input" type="file" accept="image/*" class="hidden" onchange="handleAvatarUpload(event)">
+
+            <!-- Bilingual Hint Mode Default Toggle -->
+            <button id="toggle-bilingual-mode" type="button" onclick="toggleBilingual()" class="text-xs font-bold px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-cyan-500/50 text-cyan-300 transition flex items-center gap-1 cursor-pointer" title="Always show Chinese translation">
+                <span>🌐 雙語支援:</span>
+                <span id="bilingual-status" class="text-yellow-300">ON</span>
+            </button>
+
+            <!-- CRT Filter Toggle -->
+            <button id="toggle-crt" type="button" onclick="toggleCRT()" class="text-xs font-bold px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-600 text-slate-300 transition cursor-pointer">
+                📺 CRT
+            </button>
+
+            <!-- Audio Mute Toggle -->
+            <button id="toggle-sound" type="button" onclick="toggleSound()" class="text-xs font-bold px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-600 text-yellow-400 transition cursor-pointer">
+                🔊 SFX
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Classroom Screen -->
+    <main class="w-full max-w-4xl flex-1 flex flex-col justify-center my-2 sm:my-4 z-10 relative">
+        
+        <!-- ==================== SCREEN 1: TITLE / START ==================== -->
+        <section id="screen-start" class="chalkboard-panel rounded-2xl p-5 sm:p-7 text-center flex flex-col items-center justify-center space-y-4">
+            <div class="inline-block bg-yellow-400 text-slate-950 font-black text-xs sm:text-sm px-3.5 py-1 rounded-full tracking-wider uppercase shadow">
+                HK EDB Junior Secondary CES • S2 Module 2.1 (中二單元 2.1)
+            </div>
+
+            <!-- Hand-Drawn Q-Version Mascot Duo Showcase -->
+            <div class="flex items-center justify-center gap-3 sm:gap-6 py-1">
+                <!-- Quizmaster Mr Tsang Chibi Avatar -->
+                <div class="flex flex-col items-center">
+                    <div id="start-host-avatar" class="w-24 h-24 sm:w-32 sm:h-32 rounded-2xl bg-[#fdf8f0] border-4 border-yellow-400 shadow-xl overflow-hidden animate-mascot-idle flex items-center justify-center">
+                        <!-- Rendered via JS & inline SVG -->
+                    </div>
+                    <span class="mt-1.5 bg-emerald-900/90 border border-emerald-400/50 text-yellow-300 font-tc font-black text-xs px-2.5 py-0.5 rounded-full">
+                        關主：Mr Tsang 📘
+                    </span>
+                </div>
+
+                <div class="font-pixel text-yellow-400 text-sm sm:text-xl">VS</div>
+
+                <!-- Challenger CAPTAIN Chibi Mascot -->
+                <div class="flex flex-col items-center">
+                    <div id="start-player-avatar" class="w-24 h-24 sm:w-32 sm:h-32 rounded-2xl bg-[#eef4ff] border-4 border-cyan-400 shadow-xl overflow-hidden animate-mascot-idle flex items-center justify-center" style="animation-delay: 0.4s;">
+                        <!-- Rendered via JS & inline SVG -->
+                    </div>
+                    <span class="mt-1.5 bg-slate-900/90 border border-cyan-400/50 text-cyan-300 font-tc font-black text-xs px-2.5 py-0.5 rounded-full">
+                        挑戰者：CAPTAIN 👓
+                    </span>
+                </div>
+            </div>
+
+            <!-- Official Module Title & Learning Point Confirmation -->
+            <div class="space-y-1.5">
+                <p class="text-cyan-300 font-pixel text-[10px] sm:text-xs tracking-widest">MR. TSANG'S CES INTERACTIVE CHALLENGE</p>
+                <h2 class="font-tc font-black text-2xl sm:text-4xl text-yellow-300 drop-shadow-[0_3px_0_rgba(180,20,20,1)] tracking-wider">
+                    公民、經濟與社會科互動挑戰賽
+                </h2>
+                <p class="text-base sm:text-xl font-extrabold text-white tracking-wide">
+                    S2 Module 2.1: Overcoming Growth Challenges <span class="text-emerald-300 font-tc">(克服成長挑戰)</span>
+                </p>
+                <p class="text-xs sm:text-sm font-bold text-amber-200 bg-black/35 inline-block px-3 py-1 rounded-lg border border-amber-400/30">
+                    Learning Point 1: Developing positive values and self-management skills to reject and stay away from undesirable behaviours (拒絕不良行為)
+                </p>
+            </div>
+
+            <!-- Game Mode Selector (12-Question Quick Challenge vs Full 33-Question Worksheet) -->
+            <div class="w-full max-w-2xl space-y-2">
+                <div class="text-xs font-tc font-bold text-cyan-200 uppercase tracking-wider">
+                    👇 請先選擇挑戰模式 (Select Challenge Mode)：
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-left">
+                    <button id="mode-btn-12" type="button" onclick="selectGameMode(12)" class="p-3.5 rounded-xl border-3 border-yellow-400 bg-emerald-900/90 shadow-lg transition cursor-pointer ring-2 ring-yellow-300">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-black bg-yellow-400 text-slate-950 px-2 py-0.5 rounded">⚡ 課堂速戰版</span>
+                            <span id="mode-check-12" class="text-yellow-300 font-black text-sm">✔ 已選取</span>
+                        </div>
+                        <div class="font-tc font-black text-base sm:text-lg text-white mt-1.5">
+                            模式 1：精選 12 題挑戰賽
+                        </div>
+                        <p class="text-xs text-emerald-100 mt-0.5">
+                            隨機抽取 6 題基礎知識 (Basic) ＋ 6 題進階知識 (Advanced)，適合 5 分鐘課堂快問快答。
+                        </p>
+                    </button>
+
+                    <button id="mode-btn-33" type="button" onclick="selectGameMode(33)" class="p-3.5 rounded-xl border-2 border-slate-500 bg-slate-900/75 hover:border-cyan-400 transition cursor-pointer">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-black bg-cyan-400 text-slate-950 px-2 py-0.5 rounded">📚 完整練習題庫</span>
+                            <span id="mode-check-33" class="text-slate-400 font-bold text-xs">點擊切換</span>
+                        </div>
+                        <div class="font-tc font-black text-base sm:text-lg text-white mt-1.5">
+                            模式 2：全套 33 題完整特訓
+                        </div>
+                        <p class="text-xs text-slate-300 mt-0.5">
+                            按工作紙 Q1–Q33 順序完整挑戰（Q1–Q19 Basic Knowledge ➔ Q20–Q33 Advanced Knowledge）。
+                        </p>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Rules Summary -->
+            <div class="text-xs sm:text-sm text-emerald-100 max-w-xl space-y-1 bg-black/25 px-4 py-2 rounded-lg">
+                <p>❤️ <span class="font-bold text-red-400">3 Lives</span>: Wrong answer reveals <span class="text-yellow-300 font-bold">「正解」</span> with bilingual explanation. (Shortcuts: <span class="text-cyan-300 font-bold">Enter / 1–4 / A–D</span>)</p>
+            </div>
+
+            <!-- Start Challenge Button -->
+            <div class="pt-1 relative z-30">
+                <button id="btnStart" type="button" onclick="startGame()" class="arcade-btn bg-red-600 hover:bg-red-500 text-white font-black text-lg sm:text-2xl px-8 py-4 rounded-2xl border-2 border-yellow-300 flex flex-col items-center gap-1 mx-auto cursor-pointer">
+                    <span class="font-pixel text-xs sm:text-sm text-yellow-300 animate-blink">READY • PRESS START</span>
+                    <span class="font-tc tracking-wider">🚀 開始挑戰 (START CHALLENGE)</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- ==================== SCREEN 2: ACTIVE QUIZ GAMEPLAY ==================== -->
+        <section id="screen-quiz" class="hidden flex-col space-y-3">
+            
+            <!-- Top HUD: Stage Badge, Question Progress, Timer, Lives, Score, Challenger Mini Avatar -->
+            <div class="bg-slate-900/95 border-2 border-slate-700 rounded-xl p-2.5 sm:p-3 flex flex-wrap items-center justify-between gap-2 shadow-md">
+                <!-- Challenger Mini Avatar + Stage & Progress -->
+                <div class="flex items-center gap-2.5">
+                    <div id="hud-player-avatar" class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-[#eef4ff] border-2 border-cyan-400 overflow-hidden shrink-0">
+                        <!-- Captain mini avatar -->
+                    </div>
+                    <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
+                        <span id="hud-stage-badge" class="bg-emerald-400 text-slate-950 font-tc font-black text-xs sm:text-sm px-2.5 py-0.5 rounded-lg">
+                            Basic Knowledge (基礎知識)
+                        </span>
+                        <span id="hud-q-num" class="font-pixel text-xs sm:text-sm text-cyan-300">
+                            Q1/12
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Countdown Timer -->
+                <div class="flex items-center gap-2 bg-slate-800 px-3 py-1 rounded-lg border border-slate-600">
+                    <span class="text-xs text-slate-400 font-bold">TIME</span>
+                    <span id="hud-timer" class="font-pixel text-sm sm:text-base text-emerald-400">25</span>
+                </div>
+
+                <!-- Lives & Score -->
+                <div class="flex items-center gap-3 sm:gap-4">
+                    <div id="hud-lives" class="text-base sm:text-xl tracking-widest" title="Remaining Lives">
+                        ❤️❤️❤️
+                    </div>
+                    <div class="text-right">
+                        <div class="text-[10px] text-slate-400 font-bold uppercase">Score</div>
+                        <div id="hud-score" class="font-pixel text-xs sm:text-sm text-yellow-400">0000</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chalkboard Question Area -->
+            <div id="question-card" class="chalkboard-panel rounded-2xl p-4 sm:p-6 space-y-4 relative">
+                
+                <!-- Topic Tag & Bilingual Hint Toggle -->
+                <div class="flex flex-wrap items-center justify-between gap-2 border-b border-emerald-400/20 pb-2">
+                    <span id="q-topic-tag" class="text-xs font-bold uppercase tracking-wider text-cyan-300 bg-black/30 px-2.5 py-1 rounded-md">
+                        Worksheet Q1 • Basic Knowledge
+                    </span>
+                    <button id="btn-hint" type="button" onclick="toggleHint()" class="text-xs sm:text-sm font-tc font-bold bg-amber-500/20 hover:bg-amber-500/30 text-yellow-300 border border-yellow-400/50 px-3 py-1 rounded-lg transition cursor-pointer">
+                        🔍 中文提示 / Hint
+                    </button>
+                </div>
+
+                <!-- Quizmaster Mr Tsang Side-by-Side with Question Text & Numbered Statements -->
+                <div class="flex flex-col sm:flex-row items-center sm:items-start gap-3 sm:gap-4">
+                    <div class="flex flex-col items-center shrink-0">
+                        <div id="quiz-host-avatar" class="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl bg-[#fdf8f0] border-2 border-yellow-400 shadow-lg overflow-hidden animate-mascot-idle">
+                            <!-- Quizmaster Mr Tsang Teaching Pose -->
+                        </div>
+                        <span class="mt-1 text-[11px] font-tc font-black text-yellow-300 bg-black/40 px-2 py-0.5 rounded">
+                            Mr Tsang 出題中
+                        </span>
+                    </div>
+
+                    <!-- Main English Question + Numbered Statements (1)-(4) -->
+                    <div class="flex-1 space-y-2.5 text-left w-full">
+                        <h3 id="q-text-en" class="text-base sm:text-xl font-extrabold text-white leading-snug">
+                            Loading question...
+                        </h3>
+
+                        <!-- Stacked Numbered Statements (1) to (4) for Combination MCQs -->
+                        <div id="q-statements-box" class="hidden bg-black/35 border border-emerald-400/35 rounded-xl p-3 space-y-1.5">
+                            <!-- Injected dynamically when question has (1)-(4) items -->
+                        </div>
+
+                        <!-- Collapsible Chinese Translation -->
+                        <p id="q-text-zh" class="font-tc text-sm sm:text-base text-yellow-200 bg-black/35 px-3 py-2 rounded-lg border-l-4 border-yellow-400">
+                            載入題目中...
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Options Container (A, B, C, D) -->
+                <div id="options-container" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3 pt-1">
+                    <!-- Option buttons injected via JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== SCREEN 3: "正解" (CORRECT ANSWER REVEAL OVERLAY) ==================== -->
+        <section id="screen-reveal" class="hidden chalkboard-panel rounded-2xl p-5 sm:p-7 text-center flex-col items-center justify-center space-y-4 border-yellow-400">
+            <div id="reveal-status-banner" class="w-full max-w-2xl py-2.5 px-4 rounded-xl font-black text-base sm:text-2xl tracking-wide bg-emerald-500 text-slate-950 shadow-lg">
+                ✅ GOOD! 答對了！
+            </div>
+            
+            <!-- "正解" Stamp & Answer Box with Reactive Mr Tsang Avatar -->
+            <div class="w-full max-w-2xl bg-slate-900/95 border-4 border-yellow-400 rounded-2xl p-4 sm:p-6 relative shadow-2xl space-y-3">
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <!-- Reactive Quizmaster Avatar (Cheer on Correct / Shocked on Wrong) -->
+                    <div class="flex flex-col items-center shrink-0">
+                        <div id="reveal-host-avatar" class="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl bg-[#fdf8f0] border-2 border-yellow-400 shadow-lg overflow-hidden animate-mascot-cheer">
+                            <!-- Injected dynamically -->
+                        </div>
+                        <span id="reveal-host-caption" class="mt-1 text-[11px] font-tc font-black text-yellow-300 bg-black/50 px-2 py-0.5 rounded">
+                            Mr Tsang 點評
+                        </span>
+                    </div>
+
+                    <div class="text-center sm:text-left space-y-1.5 flex-1">
+                        <div class="inline-block bg-red-600 text-white font-tc font-black text-xl sm:text-2xl px-4 py-1 rounded-lg border-2 border-white shadow-lg animate-stamp">
+                            【 正 解 】
+                        </div>
+                        <div id="reveal-correct-en" class="text-base sm:text-xl font-black text-cyan-300 leading-tight">
+                            Answer EN
+                        </div>
+                        <div id="reveal-correct-zh" class="font-tc text-sm sm:text-base font-bold text-yellow-300">
+                            答案中文
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bilingual Explanation Box -->
+                <div class="bg-slate-800/90 rounded-xl p-3.5 text-left space-y-1.5 border border-slate-600">
+                    <div class="text-xs font-bold uppercase text-emerald-400 tracking-wider">💡 CES Worksheet Concept & Explanation (題解與重點)</div>
+                    <p id="reveal-exp-en" class="text-sm sm:text-base text-white font-semibold leading-relaxed">
+                        Explanation in English.
+                    </p>
+                    <p id="reveal-exp-zh" class="font-tc text-xs sm:text-sm text-slate-300 leading-relaxed">
+                        中文解說。
+                    </p>
+                </div>
+            </div>
+
+            <!-- Next / Continue Action Button -->
+            <div class="pt-1 relative z-30">
+                <button id="btn-next-step" type="button" onclick="nextQuestion()" class="arcade-btn-yellow bg-yellow-400 hover:bg-yellow-300 text-slate-950 font-tc font-black text-base sm:text-xl px-8 py-3.5 rounded-xl border-2 border-white cursor-pointer">
+                    下一題 NEXT QUESTION ▶
+                </button>
+            </div>
+        </section>
+
+        <!-- ==================== SCREEN 4: GAME OVER / CONTINUE? ==================== -->
+        <section id="screen-gameover" class="hidden chalkboard-panel rounded-2xl p-6 sm:p-8 text-center flex-col items-center justify-center space-y-5">
+            <div class="font-pixel text-3xl sm:text-5xl text-red-500 drop-shadow-[0_4px_0_#000] animate-pulse">
+                GAME OVER
+            </div>
+            <p class="font-tc text-lg sm:text-2xl font-bold text-yellow-300">
+                生命值耗盡！Mr Tsang 鼓勵你繼續完成練習！
+            </p>
+            <div class="bg-black/40 p-4 rounded-xl border border-slate-600 max-w-md w-full space-y-1">
+                <p class="text-sm text-slate-300">Current Section: <span id="go-stage" class="text-cyan-300 font-bold">Basic Knowledge</span></p>
+                <p class="text-sm text-slate-300">Current Score: <span id="go-score" class="text-yellow-400 font-bold">300</span></p>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-3 pt-2 relative z-30">
+                <button id="btn-continue-game" type="button" onclick="continueGame()" class="arcade-btn bg-red-600 hover:bg-red-500 text-white font-tc font-black text-base sm:text-lg px-6 py-3.5 rounded-xl border-2 border-yellow-300 cursor-pointer">
+                    ❤️ CONTINUE? 繼續挑戰 (恢復3條命)
+                </button>
+                <button id="btn-end-review" type="button" onclick="showFinalReport(true)" class="bg-slate-800 hover:bg-slate-700 text-slate-200 font-tc font-bold text-sm sm:text-base px-6 py-3.5 rounded-xl border border-slate-500 cursor-pointer">
+                    結束並查看詞彙表 (End & Review)
+                </button>
+            </div>
+        </section>
+
+        <!-- ==================== SCREEN 5: COMPLETION REPORT & VOCABULARY BANK ==================== -->
+        <section id="screen-report" class="hidden chalkboard-panel rounded-2xl p-4 sm:p-6 flex-col space-y-5">
+            <div class="text-center space-y-2 border-b border-emerald-400/30 pb-4">
+                <div class="flex items-center justify-center gap-3">
+                    <div id="report-host-avatar" class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-[#fdf8f0] border-2 border-yellow-400 shadow-lg overflow-hidden">
+                        <!-- Cheer Mr Tsang -->
+                    </div>
+                    <div class="text-left">
+                        <span class="bg-yellow-400 text-slate-950 font-black text-xs px-2.5 py-0.5 rounded-full uppercase">
+                            Worksheet Assessment Complete
+                        </span>
+                        <h2 id="report-rank-title" class="font-tc font-black text-xl sm:text-3xl text-yellow-300 mt-1">
+                            🎓 榮譽畢業生！
+                        </h2>
+                        <p id="report-rank-subtitle" class="text-xs sm:text-sm text-cyan-200 font-bold">
+                            S2 Module 2.1: Overcoming Growth Challenges — Learning Point 1
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Stats Summary -->
+                <div class="grid grid-cols-4 gap-2 sm:gap-3 max-w-xl mx-auto pt-2">
+                    <div class="bg-black/40 p-2 rounded-xl border border-emerald-500/30">
+                        <div class="text-[10px] text-slate-300">GRADE</div>
+                        <div id="report-grade" class="font-pixel text-base sm:text-xl text-yellow-300 mt-1">S</div>
+                    </div>
+                    <div class="bg-black/40 p-2 rounded-xl border border-emerald-500/30">
+                        <div class="text-[10px] text-slate-300">SCORE</div>
+                        <div id="report-score" class="font-pixel text-xs sm:text-base text-yellow-400 mt-1.5">1200</div>
+                    </div>
+                    <div class="bg-black/40 p-2 rounded-xl border border-emerald-500/30">
+                        <div class="text-[10px] text-slate-300">ACCURACY</div>
+                        <div id="report-accuracy" class="font-pixel text-xs sm:text-base text-emerald-400 mt-1.5">92%</div>
+                    </div>
+                    <div class="bg-black/40 p-2 rounded-xl border border-emerald-500/30">
+                        <div class="text-[10px] text-slate-300">CONTINUES</div>
+                        <div id="report-continues" class="font-pixel text-xs sm:text-base text-cyan-300 mt-1.5">0</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bilingual Vocabulary Bank for S2 Module 2.1 Revision -->
+            <div class="space-y-2">
+                <div class="flex items-center justify-between">
+                    <h3 class="font-tc font-black text-base sm:text-lg text-yellow-300">
+                        📚 S2 Module 2.1 (Learning Point 1) 核心雙語詞彙表
+                    </h3>
+                    <span class="text-xs text-emerald-200">Worksheet Revision</span>
+                </div>
+                
+                <div id="vocab-bank-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 max-h-72 overflow-y-auto pr-1">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+
+            <div class="text-center pt-2 relative z-30">
+                <button id="btn-play-again" type="button" onclick="resetToTitle()" class="arcade-btn-yellow bg-yellow-400 hover:bg-yellow-300 text-slate-950 font-tc font-black text-base sm:text-lg px-8 py-3 rounded-xl border-2 border-white cursor-pointer">
+                    🔄 再玩一次 (PLAY AGAIN)
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="w-full max-w-4xl text-center text-[11px] sm:text-xs text-slate-400 py-1 z-10">
+        MR. TSANG'S CES CHALLENGE • 關主：Mr Tsang • HK EDB CES S2 Module 2.1: Overcoming Growth Challenges (Learning Point 1)
+    </footer>
+
+    <!-- ==================== JAVASCRIPT GAME ENGINE & COMPLETE 33-QUESTION WORKSHEET BANK ==================== -->
+    <script>
+        "use strict";
+
+        // 0. CUSTOM HAND-DRAWN Q-VERSION CHIBI MASCOTS (Mr Tsang + CAPTAIN)
+        let customUploadedAvatarURL = null;
+
+        function handleAvatarUpload(event) {
+            try {
+                const file = event && event.target && event.target.files && event.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    customUploadedAvatarURL = e.target.result;
+                    refreshAllAvatars();
+                    SFX.coin();
+                };
+                reader.readAsDataURL(file);
+            } catch (err) {
+                console.warn("Avatar upload skipped:", err);
+            }
+        }
+
+        function getHostAvatarHTML(mood) {
+            const currentMood = mood || "normal";
+            if (customUploadedAvatarURL) {
+                const badge = currentMood === "cheer"
+                    ? "🌟 GOOD! 正解！"
+                    : (currentMood === "wrong" ? "💦 加油！再試一次" : "📘 Mr Tsang");
+                return '<div class="relative w-full h-full">' +
+                    '<img src="' + customUploadedAvatarURL + '" alt="Mr Tsang Avatar" class="w-full h-full object-cover object-top">' +
+                    '<span class="absolute bottom-1 right-1 bg-yellow-400 text-slate-950 font-tc font-black text-[10px] px-1.5 py-0.5 rounded shadow">' + badge + '</span>' +
+                    '</div>';
+            }
+
+            let eyeSVG = "";
+            if (currentMood === "cheer") {
+                eyeSVG = '<path d="M 55 72 Q 63 63 71 72" fill="none" stroke="#18181b" stroke-width="3.6" stroke-linecap="round"/>' +
+                         '<ellipse cx="95" cy="72" rx="4.2" ry="3.4" fill="#18181b"/>' +
+                         '<circle cx="96.5" cy="70.5" r="1.4" fill="#ffffff"/>';
+            } else if (currentMood === "wrong") {
+                eyeSVG = '<circle cx="63" cy="72" r="6" fill="#ffffff" stroke="#18181b" stroke-width="2.6"/>' +
+                         '<circle cx="63" cy="72" r="2.4" fill="#18181b"/>' +
+                         '<circle cx="95" cy="72" r="6" fill="#ffffff" stroke="#18181b" stroke-width="2.6"/>' +
+                         '<circle cx="95" cy="72" r="2.4" fill="#18181b"/>';
+            } else {
+                eyeSVG = '<ellipse cx="63" cy="72" rx="4.2" ry="3.4" fill="#18181b"/>' +
+                         '<circle cx="64.5" cy="70.5" r="1.4" fill="#ffffff"/>' +
+                         '<ellipse cx="95" cy="72" rx="4.2" ry="3.4" fill="#18181b"/>' +
+                         '<circle cx="96.5" cy="70.5" r="1.4" fill="#ffffff"/>';
+            }
+
+            let mouthSVG = "";
+            if (currentMood === "cheer") {
+                mouthSVG = '<path d="M 67 93 Q 79 107 91 93 Z" fill="#ffffff" stroke="#18181b" stroke-width="2.8" stroke-linejoin="round"/>';
+            } else if (currentMood === "wrong") {
+                mouthSVG = '<ellipse cx="79" cy="96" rx="6" ry="5" fill="#991b1b" stroke="#18181b" stroke-width="2.5"/>';
+            } else {
+                mouthSVG = '<path d="M 66 93 Q 79 101 92 93" fill="none" stroke="#18181b" stroke-width="3.2" stroke-linecap="round"/>';
+            }
+
+            let doodleOverlay = "";
+            if (currentMood === "cheer") {
+                doodleOverlay =
+                    '<polygon class="doodle-sparkle" points="22,28 25,35 33,36 27,41 29,49 22,45 15,49 17,41 11,36 19,35" fill="#facc15" stroke="#18181b" stroke-width="2"/>' +
+                    '<polygon class="doodle-sparkle" style="animation-delay:0.3s" points="94,18 96,24 103,25 98,29 99,36 94,32 88,36 90,29 85,25 91,24" fill="#fb7185" stroke="#18181b" stroke-width="2"/>' +
+                    '<rect x="96" y="6" width="76" height="22" rx="11" fill="#4ade80" stroke="#18181b" stroke-width="2.2"/>' +
+                    '<text x="134" y="21" text-anchor="middle" font-family="Noto Sans TC, sans-serif" font-weight="900" font-size="11.5" fill="#0f172a">GOOD! 正解!</text>';
+            } else if (currentMood === "wrong") {
+                doodleOverlay =
+                    '<path d="M 38 56 C 33 65 33 72 38 72 C 43 72 43 65 38 56 Z" fill="#38bdf8" stroke="#18181b" stroke-width="2"/>' +
+                    '<path d="M 26 70 C 22 77 22 83 26 83 C 30 83 30 77 26 70 Z" fill="#7dd3fc" stroke="#18181b" stroke-width="1.8"/>' +
+                    '<rect x="88" y="6" width="84" height="22" rx="11" fill="#ef4444" stroke="#ffffff" stroke-width="2"/>' +
+                    '<text x="130" y="21" text-anchor="middle" font-family="Noto Sans TC, sans-serif" font-weight="900" font-size="10.5" fill="#ffffff">💦 加油！再試</text>';
+            } else {
+                doodleOverlay =
+                    '<polygon class="doodle-sparkle" points="22,36 24,42 31,43 26,47 27,54 22,50 16,54 18,47 13,43 19,42" fill="#facc15" stroke="#18181b" stroke-width="1.8"/>' +
+                    '<path d="M 42 26 L 47 39" stroke="#38bdf8" stroke-width="4.5" stroke-linecap="round"/>' +
+                    '<circle cx="49" cy="45" r="2.6" fill="#38bdf8" stroke="#18181b" stroke-width="1.5"/>' +
+                    '<polygon points="92,16 94,21 100,22 96,26 97,32 92,29 87,32 88,26 84,22 90,21" fill="#fb7185" stroke="#18181b" stroke-width="1.8"/>';
+            }
+
+            return '<svg viewBox="0 0 180 180" class="w-full h-full">' +
+                '<rect width="180" height="180" fill="#fdf8f0"/>' +
+                '<path d="M 4 148 Q 8 92 26 94 Q 34 96 34 106 Q 74 96 122 104 L 122 152 Z" fill="#f7f2e7" stroke="#18181b" stroke-width="3" stroke-linecap="round"/>' +
+                '<path d="M 6 180 Q 16 130 50 124 L 108 124 Q 134 130 144 180 Z" fill="#f9cbb0" stroke="#18181b" stroke-width="3.2"/>' +
+                '<path d="M 24 180 L 36 128 L 54 124 Q 79 148 104 124 L 122 128 L 134 180 Z" fill="#22c55e" stroke="#1e293b" stroke-width="3.2" stroke-linejoin="round"/>' +
+                '<path d="M 36 128 L 46 125 L 36 180 L 24 180 Z" fill="#1e3a8a" stroke="#18181b" stroke-width="2.4"/>' +
+                '<path d="M 122 128 L 112 125 L 122 180 L 134 180 Z" fill="#1e3a8a" stroke="#18181b" stroke-width="2.4"/>' +
+                '<path d="M 49 125 Q 79 152 109 125 L 103 121 Q 79 142 55 121 Z" fill="#1e3a8a" stroke="#18181b" stroke-width="2.4" stroke-linejoin="round"/>' +
+                '<path d="M 64 106 L 61 126 Q 79 134 97 126 L 94 106 Z" fill="#f5be9e" stroke="#18181b" stroke-width="3"/>' +
+                '<ellipse cx="46" cy="78" rx="6" ry="10" fill="#f9cbb0" stroke="#18181b" stroke-width="3"/>' +
+                '<ellipse cx="112" cy="78" rx="6" ry="10" fill="#f9cbb0" stroke="#18181b" stroke-width="3"/>' +
+                '<path d="M 50 64 Q 50 38 79 38 Q 108 38 108 64 L 106 86 Q 104 112 79 113 Q 54 112 52 86 Z" fill="#fbd2b4" stroke="#18181b" stroke-width="3.4"/>' +
+                '<path d="M 49 68 Q 48 44 60 35 L 64 29 L 70 33 L 77 27 L 83 32 L 91 28 L 95 34 Q 109 42 109 68 Q 105 51 95 49 Q 79 45 63 49 Q 53 51 49 68 Z" fill="#18181b" stroke="#18181b" stroke-width="2.4" stroke-linejoin="round"/>' +
+                '<path d="M 55 64 Q 63 59 71 63" fill="none" stroke="#18181b" stroke-width="3.4" stroke-linecap="round"/>' +
+                '<path d="M 87 63 Q 95 59 103 64" fill="none" stroke="#18181b" stroke-width="3.4" stroke-linecap="round"/>' +
+                eyeSVG +
+                '<path d="M 76 75 Q 72 83 76 85 Q 79 86 82 85 Q 86 83 82 75" fill="none" stroke="#18181b" stroke-width="2.6" stroke-linecap="round"/>' +
+                mouthSVG +
+                '<path d="M 134 92 L 122 58 Q 118 44 131 41 Q 144 39 149 53 L 160 88 Z" fill="#fbd2b4" stroke="#18181b" stroke-width="3.4" stroke-linejoin="round"/>' +
+                '<path d="M 131 66 Q 139 63 145 66" fill="none" stroke="#18181b" stroke-width="2.4" stroke-linecap="round"/>' +
+                '<rect x="118" y="84" width="46" height="19" rx="9.5" fill="#fbd2b4" stroke="#18181b" stroke-width="3.2"/>' +
+                '<rect x="116" y="102" width="50" height="19" rx="9.5" fill="#fbd2b4" stroke="#18181b" stroke-width="3.2"/>' +
+                '<rect x="119" y="120" width="47" height="19" rx="9.5" fill="#fbd2b4" stroke="#18181b" stroke-width="3.2"/>' +
+                '<rect x="124" y="138" width="42" height="18" rx="9" fill="#fbd2b4" stroke="#18181b" stroke-width="3.2"/>' +
+                '<path d="M 108 48 L 115 43 L 111 35" fill="none" stroke="#facc15" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>' +
+                '<path d="M 157 42 L 165 37 L 163 47 L 171 45" fill="none" stroke="#fb7185" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>' +
+                doodleOverlay +
+            '</svg>';
+        }
+
+        function getCaptainSVG() {
+            return '<svg viewBox="0 0 160 160" class="w-full h-full">' +
+                '<rect width="160" height="160" fill="#eef4ff"/>' +
+                '<polygon points="22,34 24,39 30,40 26,44 27,49 22,46 17,49 18,44 14,40 20,39" fill="#facc15" stroke="#18181b" stroke-width="1.8"/>' +
+                '<path d="M 132 28 L 135 40" stroke="#ef4444" stroke-width="4" stroke-linecap="round"/>' +
+                '<circle cx="136" cy="46" r="2.5" fill="#ef4444" stroke="#18181b" stroke-width="1.5"/>' +
+                '<path d="M 24 160 Q 34 122 80 120 Q 126 122 136 160 Z" fill="#64748b" stroke="#18181b" stroke-width="3.2"/>' +
+                '<path d="M 56 121 Q 80 137 104 121 L 98 115 Q 80 128 62 115 Z" fill="#3b82f6" stroke="#18181b" stroke-width="2.5"/>' +
+                '<text x="80" y="151" text-anchor="middle" font-family="Arial Rounded MT Bold, Inter, sans-serif" font-weight="900" font-size="15" fill="#60a5fa" stroke="#18181b" stroke-width="0.9" letter-spacing="0.5">CAPTAIN</text>' +
+                '<path d="M 42 74 Q 42 36 80 36 Q 118 36 118 74 Q 118 116 80 118 Q 42 116 42 74 Z" fill="#fbd2b4" stroke="#18181b" stroke-width="3.4"/>' +
+                '<ellipse cx="55" cy="91" rx="7" ry="4.5" fill="#fb7185" opacity="0.5"/>' +
+                '<ellipse cx="105" cy="91" rx="7" ry="4.5" fill="#fb7185" opacity="0.5"/>' +
+                '<circle cx="102" cy="95" r="2.3" fill="#18181b"/>' +
+                '<path d="M 41 72 Q 39 42 54 32 L 52 25 L 63 29 L 68 21 L 76 28 L 84 20 L 91 28 L 100 22 L 103 30 L 113 28 L 110 36 Q 121 46 119 72 Q 112 50 98 48 Q 80 45 62 48 Q 48 50 41 72 Z" fill="#18181b" stroke="#18181b" stroke-width="2.2" stroke-linejoin="round"/>' +
+                '<circle cx="64" cy="77" r="4.5" fill="#18181b"/>' +
+                '<circle cx="65.5" cy="75.5" r="1.5" fill="#ffffff"/>' +
+                '<path d="M 89 77 Q 96 70 103 77" fill="none" stroke="#18181b" stroke-width="3.2" stroke-linecap="round"/>' +
+                '<circle cx="63" cy="77" r="14" fill="none" stroke="#18181b" stroke-width="3.2"/>' +
+                '<circle cx="97" cy="77" r="14" fill="none" stroke="#18181b" stroke-width="3.2"/>' +
+                '<path d="M 77 76 Q 80 74 83 76" fill="none" stroke="#18181b" stroke-width="3"/>' +
+                '<path d="M 43 72 L 49 75" stroke="#18181b" stroke-width="3" stroke-linecap="round"/>' +
+                '<path d="M 111 75 L 117 72" stroke="#18181b" stroke-width="3" stroke-linecap="round"/>' +
+                '<path d="M 78 83 Q 80 87 83 84" fill="none" stroke="#18181b" stroke-width="2.5" stroke-linecap="round"/>' +
+                '<path d="M 69 98 Q 80 106 91 98" fill="none" stroke="#18181b" stroke-width="3" stroke-linecap="round"/>' +
+            '</svg>';
+        }
+
+        function refreshAllAvatars() {
+            const startHost = document.getElementById("start-host-avatar");
+            const startPlayer = document.getElementById("start-player-avatar");
+            const hudPlayer = document.getElementById("hud-player-avatar");
+            const quizHost = document.getElementById("quiz-host-avatar");
+            const reportHost = document.getElementById("report-host-avatar");
+
+            if (startHost) startHost.innerHTML = getHostAvatarHTML("cheer");
+            if (startPlayer) startPlayer.innerHTML = getCaptainSVG();
+            if (hudPlayer) hudPlayer.innerHTML = getCaptainSVG();
+            if (quizHost) quizHost.innerHTML = getHostAvatarHTML("normal");
+            if (reportHost) reportHost.innerHTML = getHostAvatarHTML("cheer");
+        }
+
+        // 1. SAFE WEB AUDIO API SYNTHESIZER
+        const SFX = {
+            ctx: null,
+            muted: false,
+            init: function () {
+                try {
+                    if (!this.ctx) {
+                        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                        if (AudioCtx) {
+                            this.ctx = new AudioCtx();
+                        }
+                    }
+                    if (this.ctx && this.ctx.state === "suspended") {
+                        this.ctx.resume().catch(function () {});
+                    }
+                } catch (e) {}
+            },
+            playTone: function (freq, type, duration, delay) {
+                if (this.muted) return;
+                try {
+                    this.init();
+                    if (!this.ctx) return;
+                    const d = delay || 0;
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = type || "square";
+                    osc.frequency.setValueAtTime(freq, this.ctx.currentTime + d);
+                    gain.gain.setValueAtTime(0.08, this.ctx.currentTime + d);
+                    gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + d + duration);
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.start(this.ctx.currentTime + d);
+                    osc.stop(this.ctx.currentTime + d + duration);
+                } catch (e) {}
+            },
+            coin: function () {
+                this.playTone(987.77, "square", 0.08, 0);
+                this.playTone(1318.51, "square", 0.25, 0.08);
+            },
+            correct: function () {
+                this.playTone(523.25, "square", 0.1, 0);
+                this.playTone(659.25, "square", 0.1, 0.09);
+                this.playTone(783.99, "square", 0.1, 0.18);
+                this.playTone(1046.50, "square", 0.28, 0.27);
+            },
+            wrong: function () {
+                this.playTone(220, "sawtooth", 0.18, 0);
+                this.playTone(164.81, "sawtooth", 0.35, 0.16);
+            },
+            tick: function () {
+                this.playTone(880, "triangle", 0.04, 0);
+            },
+            levelUp: function () {
+                const notes = [523.25, 659.25, 783.99, 1046.50, 783.99, 1046.50];
+                const self = this;
+                notes.forEach(function (n, idx) {
+                    self.playTone(n, "square", 0.11, idx * 0.1);
+                });
+            }
+        };
+
+        // Helper for standard combination choices (A, B, C, D)
+        const COMBO_OPTIONS = [
+            { en: "(1), (2) and (3) only", zh: "只有 (1)、(2) 及 (3)" },
+            { en: "(1), (2) and (4) only", zh: "只有 (1)、(2) 及 (4)" },
+            { en: "(1), (3) and (4) only", zh: "只有 (1)、(3) 及 (4)" },
+            { en: "(2), (3) and (4) only", zh: "只有 (2)、(3) 及 (4)" }
+        ];
+
+        // 2. COMPLETE 33-QUESTION BANK FROM ces_2.1_1_mcq_1_e.docx (Teacher's Edition Answer Key)
+        // Module 2.1: Overcoming Growth Challenges — Learning Point 1
+        const WORKSHEET_QUESTIONS = [
+            // ==================== BASIC KNOWLEDGE (Q1 – Q19) ====================
+            {
+                qNum: 1,
+                level: "Basic Knowledge",
+                qEn: "According to World Health Organization, which three of the following aspects are included in health?",
+                statements: [
+                    { num: "(1)", en: "Physical", zh: "生理健康" },
+                    { num: "(2)", en: "Mental", zh: "心理健康" },
+                    { num: "(3)", en: "Family", zh: "家庭" },
+                    { num: "(4)", en: "Social well-being", zh: "社交健康" }
+                ],
+                qZh: "根據世界衞生組織（WHO）的定義，健康包括以下哪三個方面？",
+                options: COMBO_OPTIONS,
+                correctIndex: 1, // B: (1), (2) and (4) only
+                expEn: "The WHO defines health as a state of complete physical (1), mental (2), and social well-being (4), not merely the absence of disease.",
+                expZh: "世界衞生組織將健康定義為「生理」（1）、「心理」（2）及「社交」（4）三方面的良好狀態，而不僅僅是沒有疾病。"
+            },
+            {
+                qNum: 2,
+                level: "Basic Knowledge",
+                qEn: "Which of the following are benefits of establishing a healthy, positive and meaningful lifestyle?",
+                statements: [
+                    { num: "(1)", en: "Affirming our own value", zh: "肯定自我價值" },
+                    { num: "(2)", en: "Developing personal talents", zh: "發揮個人潛能／才華" },
+                    { num: "(3)", en: "Increasing personal income", zh: "增加個人收入" },
+                    { num: "(4)", en: "Preventing from being affected by negative emotions", zh: "避免受負面情緒困擾" }
+                ],
+                qZh: "建立健康、積極及有意義的生活方式有什麼好處？",
+                options: COMBO_OPTIONS,
+                correctIndex: 1, // B: (1), (2) and (4) only
+                expEn: "A healthy, positive lifestyle helps adolescents affirm their self-value (1), develop personal talents (2), and resist negative emotions (4). Increasing personal income (3) is not a direct benefit.",
+                expZh: "健康積極的生活方式有助肯定自我價值（1）、發揮個人潛能（2）及避免受負面情緒影響（4）；增加個人收入（3）並非直接好處。"
+            },
+            {
+                qNum: 3,
+                level: "Basic Knowledge",
+                qEn: "Which of the following elements are included in addictive behaviours?",
+                statements: [
+                    { num: "(1)", en: "Strong physical craving", zh: "強烈的生理渴求" },
+                    { num: "(2)", en: "Developing tolerance", zh: "產生耐受性（需要不斷增加份量／時間）" },
+                    { num: "(3)", en: "Developing withdrawal symptoms", zh: "出現戒斷症狀（停止時感到不適或煩躁）" },
+                    { num: "(4)", en: "Escaping from reality", zh: "逃避現實" }
+                ],
+                qZh: "成癮行為（Addictive behaviours）包含以下哪些要素？",
+                options: COMBO_OPTIONS,
+                correctIndex: 0, // A: (1), (2) and (3) only
+                expEn: "Addictive behaviours are characterized by strong craving (1), tolerance (2), and withdrawal symptoms (3). Escaping from reality (4) is a cause rather than a defining element.",
+                expZh: "成癮行為的三大核心特徵是強烈的渴求（1）、耐受性（2）及戒斷症狀（3）；「逃避現實」（4）則是導致不良行為的原因而非定義要素。"
+            },
+            {
+                qNum: 4,
+                level: "Basic Knowledge",
+                qEn: "Which of the following is a kind of behavioural addictions?",
+                statements: [],
+                qZh: "以下哪一項屬於「行為成癮」（Behavioural addiction）？",
+                options: [
+                    { en: "Abusing drugs", zh: "濫用藥物／吸毒（物質成癮）" },
+                    { en: "Smoking", zh: "吸煙（物質成癮）" },
+                    { en: "Excessive drinking", zh: "酗酒（物質成癮）" },
+                    { en: "Pathological gambling", zh: "病態賭博（行為成癮）" }
+                ],
+                correctIndex: 3, // D: Pathological gambling
+                expEn: "Pathological gambling (D) is a behavioural addiction (compulsion toward an activity), whereas drug abuse, smoking, and excessive drinking are substance addictions.",
+                expZh: "「病態賭博」（D）屬於對特定活動上癮的「行為成癮」；而濫藥、吸煙及酗酒則屬於依賴化學物質的「物質成癮」。"
+            },
+            {
+                qNum: 5,
+                level: "Basic Knowledge",
+                qEn: "Which of the following is a cause of adolescents’ undesirable behaviours?",
+                statements: [],
+                qZh: "以下哪一項是青少年作出不良行為的原因？",
+                options: [
+                    { en: "Cultivating proper values", zh: "培養正確價值觀" },
+                    { en: "Escaping from reality", zh: "逃避現實" },
+                    { en: "Having healthy living habits", zh: "擁有健康生活習慣" },
+                    { en: "Harmonious family relationships", zh: "和諧的家庭關係" }
+                ],
+                correctIndex: 1, // B: Escaping from reality
+                expEn: "Adolescents may turn to undesirable behaviours to escape from academic/life stress and reality (B), whereas proper values, healthy habits, and family harmony are protective factors.",
+                expZh: "部分青少年會因想「逃避現實」（B）與壓力而沾染不良行為；其餘三項均屬預防不良行為的保護因素。"
+            },
+            {
+                qNum: 6,
+                level: "Basic Knowledge",
+                qEn: "Which of the following are negative impacts of undesirable behaviours from a personal perspective?",
+                statements: [
+                    { num: "(1)", en: "Bearing legal responsibilities", zh: "負上法律責任" },
+                    { num: "(2)", en: "Posing harm to physical and mental health", zh: "損害身心健康" },
+                    { num: "(3)", en: "Affecting one’s future", zh: "影響個人前途" },
+                    { num: "(4)", en: "Improving social order", zh: "改善社會秩序" }
+                ],
+                qZh: "從「個人層面」來看，不良行為會帶來以下哪些負面影響？",
+                options: COMBO_OPTIONS,
+                correctIndex: 0, // A: (1), (2) and (3) only
+                expEn: "For the individual, undesirable behaviours lead to legal consequences (1), harm physical and mental health (2), and damage future prospects (3).",
+                expZh: "對個人而言，不良行為會導致負上法律責任（1）、損害身心健康（2）及影響前途（3）。"
+            },
+            {
+                qNum: 7,
+                level: "Basic Knowledge",
+                qEn: "Which of the following are negative impacts on society caused by undesirable behaviours?",
+                statements: [
+                    { num: "(1)", en: "Posing harm to social order", zh: "破壞社會治安／秩序" },
+                    { num: "(2)", en: "Decreasing crime rate", zh: "降低罪案率" },
+                    { num: "(3)", en: "Losing young labour force", zh: "損失年輕勞動力" },
+                    { num: "(4)", en: "Increasing medical expenditure", zh: "增加社會醫療開支" }
+                ],
+                qZh: "不良行為對「社會」會造成以下哪些負面影響？",
+                options: COMBO_OPTIONS,
+                correctIndex: 2, // C: (1), (3) and (4) only
+                expEn: "At the societal level, undesirable behaviours disrupt social order (1), reduce the young labour force (3), and increase public medical expenditure (4).",
+                expZh: "對社會而言，不良行為會破壞社會秩序（1）、令社會損失年輕勞動力（3），並加重公共醫療開支（4）。"
+            },
+            {
+                qNum: 8,
+                level: "Basic Knowledge",
+                qEn: "Which of the following are elements of bullying?",
+                statements: [
+                    { num: "(1)", en: "Bad intent", zh: "惡意／蓄意傷害" },
+                    { num: "(2)", en: "Occasionality", zh: "偶發性" },
+                    { num: "(3)", en: "Imbalance of power", zh: "權力／強弱不均" },
+                    { num: "(4)", en: "Repetition", zh: "重複性／持續發生" }
+                ],
+                qZh: "欺凌行為（Bullying）包含以下哪些要素？",
+                options: COMBO_OPTIONS,
+                correctIndex: 2, // C: (1), (3) and (4) only
+                expEn: "Bullying is defined by three core elements: bad intent (1), imbalance of power (3), and repetition (4)—not occasionality (2).",
+                expZh: "欺凌行為具備三大要素：「惡意」（1）、「強弱／權力不均」（3）及「重複發生」（4），而非偶發性（2）。"
+            },
+            {
+                qNum: 9,
+                level: "Basic Knowledge",
+                qEn: "Which of the following are causes of bullying among adolescents?",
+                statements: [
+                    { num: "(1)", en: "Distant family relationships", zh: "家庭關係疏離" },
+                    { num: "(2)", en: "Spreading of violent content on media", zh: "傳媒渲染暴力資訊" },
+                    { num: "(3)", en: "Peer pressure", zh: "朋輩壓力" },
+                    { num: "(4)", en: "Participating in charitable activities", zh: "參與慈善活動" }
+                ],
+                qZh: "以下哪些是青少年出現欺凌行為的原因？",
+                options: COMBO_OPTIONS,
+                correctIndex: 0, // A: (1), (2) and (3) only
+                expEn: "Distant family relationships (1), violent media content (2), and peer pressure (3) contribute to adolescent bullying.",
+                expZh: "家庭關係疏離（1）、傳媒傳播暴力內容（2）及朋輩壓力（3）均是導致青少年欺凌的原因。"
+            },
+            {
+                qNum: 10,
+                level: "Basic Knowledge",
+                qEn: "Which of the following is a characteristic of bully victims?",
+                statements: [],
+                qZh: "以下哪一項是「受欺凌者」（Bully victims）的常見特徵？",
+                options: [
+                    { en: "Compensating the feelings of inferiority through power", zh: "透過欺壓他人來彌補自卑感（欺凌者特徵）" },
+                    { en: "Introverted personality with low social skills", zh: "性格內向、社交技巧較弱（受欺凌者特徵）" },
+                    { en: "Tends to express emotions and solve problems by violence", zh: "傾向以暴力表達情緒及解決問題（欺凌者特徵）" },
+                    { en: "Loses empathy towards others", zh: "對他人失去同理心（欺凌者／旁觀者負面影響）" }
+                ],
+                correctIndex: 1, // B: Introverted personality with low social skills
+                expEn: "Bully victims often have an introverted personality and lower social skills (B), making it harder for them to seek help or defend themselves. Options A, C, and D describe bullies.",
+                expZh: "受欺凌者往往性格較內向、社交技巧較弱（B），較難主動求助或保護自己；A、C、D 則為欺凌者的特徵。"
+            },
+            {
+                qNum: 11,
+                level: "Basic Knowledge",
+                qEn: "Which of the following are bullying behaviours?",
+                statements: [
+                    { num: "(1)", en: "Not taking the initiative to greet classmate(s)", zh: "沒有主動跟同學打招呼" },
+                    { num: "(2)", en: "Pushing over classmate(s) with intent", zh: "蓄意推倒同學（肢體欺凌）" },
+                    { num: "(3)", en: "Name-calling classmate(s)", zh: "替同學改侮辱性花名／辱罵（言語欺凌）" },
+                    { num: "(4)", en: "Posting personal attack(s) online", zh: "在網上發布人身攻擊言論（網絡欺凌）" }
+                ],
+                qZh: "以下哪些屬於欺凌行為？",
+                options: COMBO_OPTIONS,
+                correctIndex: 3, // D: (2), (3) and (4) only
+                expEn: "Physical pushing (2), verbal name-calling (3), and online personal attacks (4) are forms of bullying. Simply not greeting someone first (1) is not bullying.",
+                expZh: "蓄意推倒同學（2，肢體欺凌）、辱罵／改花名（3，言語欺凌）及網上人身攻擊（4，網絡欺凌）均屬欺凌行為；沒有主動打招呼（1）並不構成欺凌。"
+            },
+            {
+                qNum: 12,
+                level: "Basic Knowledge",
+                qEn: "Which of the following descriptions of sexual harassment are correct?",
+                statements: [
+                    { num: "(1)", en: "The harasser and the victim can be any gender.", zh: "騷擾者與受害者可以是任何性別。" },
+                    { num: "(2)", en: "With the characteristics of being offensive, humiliating or intimidating.", zh: "具有冒犯性、侮辱性或威嚇性的特徵。" },
+                    { num: "(3)", en: "Only physical contact counts as sexual harassment.", zh: "只有身體接觸才算性騷擾。" },
+                    { num: "(4)", en: "It refers to making unwelcome and sex-related behaviours.", zh: "指作出不受歡迎且與性有關的行為。" }
+                ],
+                qZh: "以下哪些關於「性騷擾」（Sexual harassment）的描述是正確的？",
+                options: COMBO_OPTIONS,
+                correctIndex: 1, // B: (1), (2) and (4) only
+                expEn: "Sexual harassment involves unwelcome sex-related behaviour (4) that is offensive, humiliating, or intimidating (2) and can involve any gender (1). Verbal, visual, or online acts also count—not only physical contact (3).",
+                expZh: "性騷擾指任何不受歡迎並涉及性的行為（4），具冒犯、侮辱或威嚇性（2），且任何性別均可能成為騷擾者或受害者（1）；言語、眼神或網上訊息同樣可構成性騷擾，不限於身體接觸（3）。"
+            },
+            {
+                qNum: 13,
+                level: "Basic Knowledge",
+                qEn: "Which of the following are causes of sexual harassment committed by adolescents?",
+                statements: [
+                    { num: "(1)", en: "Lack of sex education", zh: "缺乏性教育" },
+                    { num: "(2)", en: "Being affected by the culture of sexual openness promoted by the media", zh: "受傳媒鼓吹性開放風氣影響" },
+                    { num: "(3)", en: "Acquiring adequate sense of law-abidingness", zh: "具備足夠的守法意識" },
+                    { num: "(4)", en: "Lack of care from family", zh: "缺乏家庭關愛" }
+                ],
+                qZh: "以下哪些是青少年作出性騷擾行為的原因？",
+                options: COMBO_OPTIONS,
+                correctIndex: 1, // B: (1), (2) and (4) only
+                expEn: "Lack of proper sex education (1), media influence promoting sexual openness (2), and lack of family care (4) are key causes of adolescent sexual harassment.",
+                expZh: "缺乏正確性教育（1）、受傳媒渲染性開放風氣影響（2）及缺乏家庭關愛（4）均可能導致青少年作出性騷擾行為。"
+            },
+            {
+                qNum: 14,
+                level: "Basic Knowledge",
+                qEn: "Which of the following descriptions of drug abuse is correct?",
+                statements: [],
+                qZh: "以下哪一項關於「濫用藥物／吸毒」（Drug abuse）的描述是正確的？",
+                options: [
+                    { en: "There is no need to bear legal responsibilities.", zh: "無需負上任何法律責任。" },
+                    { en: "It would not cause psychological dependence.", zh: "不會造成心理依賴。" },
+                    { en: "It refers to taking drugs with a doctor’s prescription.", zh: "指按照醫生處方服用藥物。" },
+                    { en: "It refers to taking non-therapeutic and mentally hazardous drugs without a doctor’s prescription.", zh: "指在沒有醫生處方下，服用非醫療用途及危害精神的藥物。" }
+                ],
+                correctIndex: 3, // D
+                expEn: "Drug abuse means taking non-therapeutic, mentally hazardous substances without a doctor's prescription (D), causing both physical/psychological dependence and legal liability.",
+                expZh: "濫用藥物指在沒有醫生處方下服用非治療用途及危害精神的毒品／藥物（D），會造成身心依賴並須負上嚴重法律責任。"
+            },
+            {
+                qNum: 15,
+                level: "Basic Knowledge",
+                qEn: "Which of the following are causes of drug abuse among adolescents?",
+                statements: [
+                    { num: "(1)", en: "Escaping from stress and reality", zh: "逃避壓力與現實" },
+                    { num: "(2)", en: "Being tempted by bad friends", zh: "受損友引誘" },
+                    { num: "(3)", en: "Having misunderstanding about drugs", zh: "對毒品存有誤解（例如誤以為不會上癮）" },
+                    { num: "(4)", en: "Having a positive life planning", zh: "擁有積極的人生規劃" }
+                ],
+                qZh: "以下哪些是青少年濫用藥物的原因？",
+                options: COMBO_OPTIONS,
+                correctIndex: 0, // A: (1), (2) and (3) only
+                expEn: "Escaping stress/reality (1), temptation by bad peers (2), and misconceptions about drugs (3) lead adolescents to drug abuse.",
+                expZh: "逃避壓力與現實（1）、受損友引誘（2）及對毒品存有誤解（3）均是青少年吸毒／濫藥的原因。"
+            },
+            {
+                qNum: 16,
+                level: "Basic Knowledge",
+                qEn: "Which of the following are negative impacts of drug addiction?",
+                statements: [
+                    { num: "(1)", en: "Having mood swings", zh: "情緒波動／不穩" },
+                    { num: "(2)", en: "Enhancing immunity", zh: "增強免疫力" },
+                    { num: "(3)", en: "Ruining relationships with friends and family", zh: "破壞與親友的關係" },
+                    { num: "(4)", en: "Increasing risk of cancer", zh: "增加患癌風險" }
+                ],
+                qZh: "毒癮（Drug addiction）會帶來以下哪些負面影響？",
+                options: COMBO_OPTIONS,
+                correctIndex: 2, // C: (1), (3) and (4) only
+                expEn: "Drug addiction causes severe mood swings (1), destroys family and peer relationships (3), and increases the risk of cancer and organ damage (4).",
+                expZh: "毒癮會引致情緒大幅波動（1）、破壞與家人朋友的關係（3），並增加患癌及器官受損風險（4）。"
+            },
+            {
+                qNum: 17,
+                level: "Basic Knowledge",
+                qEn: "Which of the following are ways to refuse undesirable behaviours?",
+                statements: [
+                    { num: "(1)", en: "Telling a trusted person", zh: "告知可信任的人（如父母、老師、社工）" },
+                    { num: "(2)", en: "Saying no to undesirable behaviours", zh: "堅定地對不良行為說「不」" },
+                    { num: "(3)", en: "Leaving high-risk environments", zh: "遠離高危場所／環境" },
+                    { num: "(4)", en: "Blindly following peer opinions", zh: "盲目跟從朋輩意見" }
+                ],
+                qZh: "以下哪些是拒絕不良行為的有效方法？",
+                options: COMBO_OPTIONS,
+                correctIndex: 0, // A: (1), (2) and (3) only
+                expEn: "To reject undesirable behaviours, adolescents should say no firmly (2), leave high-risk places immediately (3), and tell a trusted adult (1).",
+                expZh: "拒絕不良行為的方法包括堅定說「不」（2）、立即離開高危環境（3）及向可信任的師長或家人求助（1）。"
+            },
+            {
+                qNum: 18,
+                level: "Basic Knowledge",
+                qEn: "Which of the following are remedial measures?",
+                statements: [],
+                qZh: "當已經沾染不良行為時，以下哪一項屬於「補救措施」（Remedial measures）？",
+                options: [
+                    { en: "Attempt gambling", zh: "嘗試賭博" },
+                    { en: "Indulge in browsing the Internet", zh: "沉迷瀏覽互聯網" },
+                    { en: "Attend counselling courses", zh: "參加輔導課程／接受專業輔導" },
+                    { en: "Make bad friends", zh: "結交損友" }
+                ],
+                correctIndex: 2, // C: Attend counselling courses
+                expEn: "Attending counselling courses (C) is a constructive remedial measure to help individuals recover from undesirable or addictive behaviours.",
+                expZh: "「參加輔導課程」（C）能幫助當事人戒除惡習與重建健康生活，屬於有效的補救措施。"
+            },
+            {
+                qNum: 19,
+                level: "Basic Knowledge",
+                qEn: "Which of the following are strategies to prevent undesirable behaviours?",
+                statements: [
+                    { num: "(1)", en: "Cultivate ability to distinguish right from wrong", zh: "培養明辨是非的能力" },
+                    { num: "(2)", en: "Build proper values", zh: "建立正確的價值觀" },
+                    { num: "(3)", en: "Get in touch more with people with undesirable behaviours", zh: "多接觸有不良行為的人" },
+                    { num: "(4)", en: "Build law-abiding awareness", zh: "建立守法意識" }
+                ],
+                qZh: "以下哪些是「預防」不良行為的策略？",
+                options: COMBO_OPTIONS,
+                correctIndex: 1, // B: (1), (2) and (4) only
+                expEn: "Preventive strategies include cultivating critical judgment of right and wrong (1), building proper values (2), and strengthening law-abiding awareness (4).",
+                expZh: "預防不良行為的策略包括培養明辨是非能力（1）、建立正確價值觀（2）及培養守法意識（4）。"
+            },
+
+            // ==================== ADVANCED KNOWLEDGE (Q20 – Q33) ====================
+            {
+                qNum: 20,
+                level: "Advanced Knowledge",
+                qEn: "Which of the following are healthy habits?",
+                statements: [
+                    { num: "(1)", en: "Maintaining personal hygiene", zh: "保持個人衞生" },
+                    { num: "(2)", en: "Refusing to take drugs", zh: "拒絕吸毒／濫藥" },
+                    { num: "(3)", en: "Implement a healthy diet", zh: "實踐健康飲食" },
+                    { num: "(4)", en: "Frequent use of electronic appliances", zh: "頻繁／過度使用電子產品" }
+                ],
+                qZh: "以下哪些屬於健康的生活習慣？",
+                options: COMBO_OPTIONS,
+                correctIndex: 0, // A: (1), (2) and (3) only
+                expEn: "Maintaining personal hygiene (1), refusing drugs (2), and eating a balanced healthy diet (3) are healthy habits, whereas excessive screen use (4) harms health.",
+                expZh: "保持個人衞生（1）、拒絕吸毒（2）及實踐健康飲食（3）均是健康習慣；頻繁使用電子產品（4）則會損害視力與作息。"
+            },
+            {
+                qNum: 21,
+                level: "Advanced Knowledge",
+                qEn: "Which of the following are harms to the body caused by drugs?",
+                statements: [
+                    { num: "(1)", en: "Better memory", zh: "增強記憶力" },
+                    { num: "(2)", en: "Impairment of liver function", zh: "損害肝臟功能" },
+                    { num: "(3)", en: "Higher risk of respiratory diseases", zh: "增加患上呼吸系統疾病的風險" },
+                    { num: "(4)", en: "Causing heart diseases", zh: "引致心臟病" }
+                ],
+                qZh: "毒品對身體會造成以下哪些傷害？",
+                options: COMBO_OPTIONS,
+                correctIndex: 3, // D: (2), (3) and (4) only
+                expEn: "Drugs damage major organs—impairing liver function (2), raising respiratory disease risk (3), and causing heart diseases (4), while harming memory rather than improving it.",
+                expZh: "毒品會損害肝臟功能（2）、增加患呼吸系統疾病風險（3）及引致心臟病（4），同時會令記憶力衰退而非增強（1）。"
+            },
+            {
+                qNum: 22,
+                level: "Advanced Knowledge",
+                qEn: "Which of the following are characteristics of drug addiction?",
+                statements: [
+                    { num: "(1)", en: "Active participation in extra-curricular activities", zh: "積極參與課外活動" },
+                    { num: "(2)", en: "Having confusion and restlessness", zh: "神志不清／精神恍惚及坐立不安" },
+                    { num: "(3)", en: "Often repeating meaningless actions", zh: "經常重複無意義的動作" },
+                    { num: "(4)", en: "Avoiding acquaintances", zh: "迴避熟人／疏遠親友" }
+                ],
+                qZh: "以下哪些是毒癮發作或吸毒成癮者的常見特徵？",
+                options: COMBO_OPTIONS,
+                correctIndex: 3, // D: (2), (3) and (4) only
+                expEn: "People suffering from drug addiction often display confusion and restlessness (2), repeat meaningless actions (3), and avoid acquaintances (4).",
+                expZh: "吸毒成癮者常表現出精神恍惚與坐立不安（2）、經常重複無意義動作（3）及刻意迴避熟人（4）。"
+            },
+            {
+                qNum: 23,
+                level: "Advanced Knowledge",
+                qEn: "Which of the following are negative impacts of bullying on bystanders?",
+                statements: [
+                    { num: "(1)", en: "Loses empathy", zh: "失去同理心" },
+                    { num: "(2)", en: "Enhancing learning motivation", zh: "提升學習動機" },
+                    { num: "(3)", en: "Having anxiety and fear", zh: "產生焦慮與恐懼" },
+                    { num: "(4)", en: "Avoiding social events", zh: "迴避社交活動" }
+                ],
+                qZh: "欺凌事件對「旁觀者」（Bystanders）會造成以下哪些負面影響？",
+                options: COMBO_OPTIONS,
+                correctIndex: 2, // C: (1), (3) and (4) only
+                expEn: "Witnessing bullying can desensitize bystanders so they lose empathy (1), feel anxiety and fear of becoming the next target (3), and avoid social events (4).",
+                expZh: "目睹欺凌會令旁觀者逐漸麻木而失去同理心（1）、因害怕成為下一個目標而感到焦慮恐懼（3），並迴避社交活動（4）。"
+            },
+            {
+                qNum: 24,
+                level: "Advanced Knowledge",
+                qEn: "Which of the following is an example of internet addiction?",
+                statements: [],
+                qZh: "以下哪一項是「網絡成癮」（Internet addiction）的例子？",
+                options: [
+                    { en: "Making friends using the Internet", zh: "透過互聯網結交朋友" },
+                    { en: "Playing paid games", zh: "遊玩付費遊戲" },
+                    { en: "Spending long hours online that affects routines", zh: "長時間上網以致嚴重影響日常生活作息" },
+                    { en: "Using the Internet for less than an hour every day", zh: "每天使用互聯網少於一小時" }
+                ],
+                correctIndex: 2, // C
+                expEn: "Internet addiction occurs when excessive online time disrupts daily routines, sleep, and studies (C)—not moderate or purposeful online use.",
+                expZh: "「長時間上網以致影響日常生活作息」（C）是網絡成癮的核心表現；適度或有節制地使用互聯網並不構成成癮。"
+            },
+            {
+                qNum: 25,
+                level: "Advanced Knowledge",
+                qEn: "Which of the following are negative impacts of internet addiction?",
+                statements: [
+                    { num: "(1)", en: "Worsening academic performance", zh: "學業成績退步" },
+                    { num: "(2)", en: "Causing eye fatigue", zh: "引致眼睛疲勞／視力受損" },
+                    { num: "(3)", en: "Worsening interpersonal relationships", zh: "人際關係惡化" },
+                    { num: "(4)", en: "Improving self-control ability", zh: "提升自我控制能力" }
+                ],
+                qZh: "網絡成癮會造成以下哪些負面影響？",
+                options: COMBO_OPTIONS,
+                correctIndex: 0, // A: (1), (2) and (3) only
+                expEn: "Internet addiction harms academic performance (1), causes physical strain like eye fatigue (2), and weakens real-life interpersonal relationships (3).",
+                expZh: "網絡成癮會導致學業成績退步（1）、眼睛疲勞（2）及現實人際關係惡化（3），並會削弱而非提升自控力（4）。"
+            },
+            {
+                qNum: 26,
+                level: "Advanced Knowledge",
+                qEn: "Which of the following descriptions of smoking is correct?",
+                statements: [],
+                qZh: "以下哪一項關於「吸煙」（Smoking）的描述是正確的？",
+                options: [
+                    { en: "Smoking will not cause addiction.", zh: "吸煙不會引致上癮。" },
+                    { en: "Smoking can refresh thinking.", zh: "吸煙能提神醒腦、使思維清晰。" },
+                    { en: "Smoking e-cigarette will pose harm to health.", zh: "吸食電子煙同樣會危害健康。" },
+                    { en: "Smoking can lose weight.", zh: "吸煙可以健康減肥。" }
+                ],
+                correctIndex: 2, // C
+                expEn: "E-cigarettes contain nicotine and harmful chemicals that damage lungs and cardiovascular health just like conventional cigarettes (C).",
+                expZh: "電子煙同樣含有尼古丁及多種有害化學物質，會嚴重損害呼吸及心血管健康（C）。"
+            },
+            {
+                qNum: 27,
+                level: "Advanced Knowledge",
+                qEn: "Which of the following are negative impacts of smoking addiction?",
+                statements: [
+                    { num: "(1)", en: "Higher risk of diagnosing cancer", zh: "增加患上癌症的風險" },
+                    { num: "(2)", en: "Leading to having confusion and restlessness", zh: "引致精神恍惚／焦躁不安（尼古丁戒斷反應）" },
+                    { num: "(3)", en: "Improving endurance in exercising", zh: "提升運動耐力" },
+                    { num: "(4)", en: "Damaging the immune system", zh: "損害免疫系統" }
+                ],
+                qZh: "煙癮（Smoking addiction）會帶來以下哪些負面影響？",
+                options: COMBO_OPTIONS,
+                correctIndex: 1, // B: (1), (2) and (4) only
+                expEn: "Smoking addiction increases cancer risk (1), causes restlessness/confusion during nicotine craving (2), and weakens the immune system (4), while reducing exercise endurance.",
+                expZh: "煙癮會增加患癌風險（1）、因尼古丁依賴引致焦躁不安（2）及損害免疫系統（4），並會降低而非提升運動耐力（3）。"
+            },
+            {
+                qNum: 28,
+                level: "Advanced Knowledge",
+                qEn: "Which of the following are causes of gambling addiction?",
+                statements: [
+                    { num: "(1)", en: "Having a clear understanding of gambling", zh: "對賭博有清晰了解" },
+                    { num: "(2)", en: "Lack of satisfaction in life", zh: "在現實生活中缺乏滿足感" },
+                    { num: "(3)", en: "Desire to make quick money", zh: "渴望賺快錢／不勞而獲" },
+                    { num: "(4)", en: "Attracted by gambling advertisements", zh: "受賭博廣告吸引" }
+                ],
+                qZh: "以下哪些是導致「賭博成癮」（Gambling addiction）的原因？",
+                options: COMBO_OPTIONS,
+                correctIndex: 3, // D: (2), (3) and (4) only
+                expEn: "Lack of life satisfaction (2), greed for quick money (3), and enticing gambling advertisements (4) drive adolescents and adults toward gambling addiction.",
+                expZh: "生活缺乏滿足感（2）、渴望賺快錢（3）及受賭博廣告吸引（4）均是引致賭博成癮的原因。"
+            },
+            {
+                qNum: 29,
+                level: "Advanced Knowledge",
+                qEn: "Which of the following are characteristics of gambling addiction?",
+                statements: [
+                    { num: "(1)", en: "Constant borrowing money to continue gambling", zh: "不斷借錢以繼續賭博" },
+                    { num: "(2)", en: "Betting within the range of economic capability", zh: "在經濟能力範圍內投注" },
+                    { num: "(3)", en: "Undesirable eating and sleeping routines due to gambling", zh: "因賭博導致飲食與睡眠作息失調" },
+                    { num: "(4)", en: "Increase in gambling time which is difficult to stop", zh: "賭博時間不斷增加且難以自拔" }
+                ],
+                qZh: "以下哪些是「賭博成癮」的特徵？",
+                options: COMBO_OPTIONS,
+                correctIndex: 2, // C: (1), (3) and (4) only
+                expEn: "Pathological gamblers constantly borrow money to chase losses (1), neglect eating and sleeping routines (3), and spend escalating time gambling without control (4).",
+                expZh: "病態賭博成癮者會不斷借貸繼續賭博（1）、廢寢忘食令作息失調（3），且賭博時間越陷越深、難以停止（4）。"
+            },
+            {
+                qNum: 30,
+                level: "Advanced Knowledge",
+                qEn: "Which of the following are negative impacts of pornography addiction?",
+                statements: [
+                    { num: "(1)", en: "Posing harm to physical and mental health", zh: "損害身心健康" },
+                    { num: "(2)", en: "Decrease in self-control ability", zh: "自我控制能力下降" },
+                    { num: "(3)", en: "Building proper values", zh: "建立正確價值觀" },
+                    { num: "(4)", en: "Worsening interpersonal relationships", zh: "令現實人際關係惡化" }
+                ],
+                qZh: "沉迷色情資訊（Pornography addiction）會帶來以下哪些負面影響？",
+                options: COMBO_OPTIONS,
+                correctIndex: 1, // B: (1), (2) and (4) only
+                expEn: "Pornography addiction harms physical and mental health (1), weakens self-control (2), and distorts views on intimacy, worsening interpersonal relationships (4).",
+                expZh: "沉迷色情資訊會損害身心健康（1）、削弱自我控制能力（2），並扭曲兩性觀念導致人際關係惡化（4）。"
+            },
+            {
+                qNum: 31,
+                level: "Advanced Knowledge",
+                qEn: "Which of the following descriptions of compensated dating is correct?",
+                statements: [],
+                qZh: "以下哪一項關於「援交／援助交際」（Compensated dating）的描述是正確的？",
+                options: [
+                    { en: "Attending friends gathering", zh: "參加普通朋友聚會" },
+                    { en: "Meeting the opposite sex on dating websites", zh: "在交友網站認識異性" },
+                    { en: "Participating in social activities involving money transactions", zh: "參與涉及金錢或物質交易的社交／性相關活動" },
+                    { en: "Playing online games with friends", zh: "與朋友一起玩網上遊戲" }
+                ],
+                correctIndex: 2, // C
+                expEn: "Compensated dating refers to participating in social or sexual companionship activities in exchange for money or material rewards (C), carrying severe legal and personal safety risks.",
+                expZh: "援助交際指參與涉及金錢或物質交易的社交／陪伴活動（C），極易令青少年墮入法網及遭受人身安全威脅。"
+            },
+            {
+                qNum: 32,
+                level: "Advanced Knowledge",
+                qEn: "Which of the following are causes of adolescents engaging in naked chats?",
+                statements: [
+                    { num: "(1)", en: "Ability to identify fake information", zh: "具備分辨虛假資訊的能力" },
+                    { num: "(2)", en: "Lack of satisfaction in life", zh: "現實生活缺乏滿足感" },
+                    { num: "(3)", en: "Curiosity", zh: "出於好奇心" },
+                    { num: "(4)", en: "Recklessness", zh: "行事魯莽／缺乏危機意識" }
+                ],
+                qZh: "以下哪些是青少年參與「裸聊」（Naked chats）的原因？",
+                options: COMBO_OPTIONS,
+                correctIndex: 3, // D: (2), (3) and (4) only
+                expEn: "Lack of satisfaction in real life (2), curiosity (3), and recklessness/low risk awareness (4) lead some adolescents into dangerous naked chats.",
+                expZh: "現實生活缺乏滿足感（2）、出於好奇心（3）及行事魯莽缺乏危機意識（4）均是青少年誤墮裸聊陷阱的原因。"
+            },
+            {
+                qNum: 33,
+                level: "Advanced Knowledge",
+                qEn: "Which of the following are possible consequences of naked chats?",
+                statements: [
+                    { num: "(1)", en: "Causing psychological trauma", zh: "造成嚴重心理創傷" },
+                    { num: "(2)", en: "Enhancing trust in others", zh: "增強對他人的信任" },
+                    { num: "(3)", en: "Facing blackmail", zh: "遭到勒索／威脅" },
+                    { num: "(4)", en: "Abuse of personal information", zh: "個人資料及影像遭濫用或公開" }
+                ],
+                qZh: "參與「裸聊」可能帶來以下哪些嚴重後果？",
+                options: COMBO_OPTIONS,
+                correctIndex: 2, // C: (1), (3) and (4) only
+                expEn: "Naked chats frequently result in severe psychological trauma (1), financial or sexual blackmail (3), and malicious abuse/leaking of personal data and images (4).",
+                expZh: "裸聊極可能令受害者承受嚴重心理創傷（1）、遭到金錢或進一步勒索（3），以及個人資料與私密影像遭濫用（4）。"
+            }
+        ];
+
+        // 3. VOCABULARY BANK DATA (S2 Module 2.1 Learning Point 1)
+        const VOCABULARY_BANK = [
+            { en: "Physical, Mental & Social Well-being", zh: "生理、心理及社交健康", def: "The three core dimensions of health defined by the World Health Organization (WHO)." },
+            { en: "Addictive Behaviours", zh: "成癮行為", def: "Behaviours marked by strong craving, tolerance, and withdrawal symptoms." },
+            { en: "Behavioural Addiction", zh: "行為成癮", def: "Compulsive addiction to an activity (e.g., pathological gambling, internet addiction)." },
+            { en: "Elements of Bullying", zh: "欺凌三要素", def: "Bad intent (惡意), imbalance of power (強弱不均), and repetition (重複發生)." },
+            { en: "Sexual Harassment", zh: "性騷擾", def: "Unwelcome sex-related behaviour that is offensive, humiliating, or intimidating." },
+            { en: "Drug Abuse", zh: "濫用藥物／吸毒", def: "Taking non-therapeutic, mentally hazardous drugs without a doctor's prescription." },
+            { en: "Withdrawal Symptoms", zh: "戒斷症狀", def: "Physical or emotional distress (e.g., restlessness, irritability) when stopping an addictive habit." },
+            { en: "Compensated Dating", zh: "援助交際（援交）", def: "Social or companionship activities involving money or material transactions." },
+            { en: "Preventive Strategies", zh: "預防策略", def: "Cultivating ability to distinguish right from wrong, proper values, and law-abiding awareness." },
+            { en: "Remedial Measures", zh: "補救措施", def: "Attending counselling courses and seeking professional help to overcome undesirable habits." }
+        ];
+
+        // 4. GAME STATE & CORE ENGINE
+        const gameState = {
+            selectedMode: 12, // 12 = Quick Challenge (6 Basic + 6 Advanced), 33 = Full Worksheet Q1-Q33
+            activeScreen: "screen-start",
+            questions: [],
+            currentIndex: 0,
+            lives: 3,
+            score: 0,
+            correctCount: 0,
+            continuesUsed: 0,
+            timer: 25,
+            timerInterval: null,
+            globalBilingual: true,
+            currentHintVisible: true,
+            isGameOverPending: false,
+            answeringLocked: false
+        };
+
+        function selectGameMode(modeNum) {
+            gameState.selectedMode = modeNum;
+            SFX.tick();
+
+            const btn12 = document.getElementById("mode-btn-12");
+            const btn33 = document.getElementById("mode-btn-33");
+            const chk12 = document.getElementById("mode-check-12");
+            const chk33 = document.getElementById("mode-check-33");
+
+            if (modeNum === 12) {
+                if (btn12) btn12.className = "p-3.5 rounded-xl border-3 border-yellow-400 bg-emerald-900/90 shadow-lg transition cursor-pointer ring-2 ring-yellow-300";
+                if (btn33) btn33.className = "p-3.5 rounded-xl border-2 border-slate-500 bg-slate-900/75 hover:border-cyan-400 transition cursor-pointer";
+                if (chk12) { chk12.textContent = "✔ 已選取"; chk12.className = "text-yellow-300 font-black text-sm"; }
+                if (chk33) { chk33.textContent = "點擊切換"; chk33.className = "text-slate-400 font-bold text-xs"; }
+            } else {
+                if (btn33) btn33.className = "p-3.5 rounded-xl border-3 border-yellow-400 bg-emerald-900/90 shadow-lg transition cursor-pointer ring-2 ring-yellow-300";
+                if (btn12) btn12.className = "p-3.5 rounded-xl border-2 border-slate-500 bg-slate-900/75 hover:border-cyan-400 transition cursor-pointer";
+                if (chk33) { chk33.textContent = "✔ 已選取"; chk33.className = "text-yellow-300 font-black text-sm"; }
+                if (chk12) { chk12.textContent = "點擊切換"; chk12.className = "text-slate-400 font-bold text-xs"; }
+            }
+        }
+
+        function shuffleArray(arr) {
+            const copy = arr.slice();
+            for (let i = copy.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                const tmp = copy[i];
+                copy[i] = copy[j];
+                copy[j] = tmp;
+            }
+            return copy;
+        }
+
+        function buildQuestionDeck() {
+            if (gameState.selectedMode === 33) {
+                return WORKSHEET_QUESTIONS.slice();
+            }
+            // Mode 1: 6 random Basic Knowledge (Q1-Q19) + 6 random Advanced Knowledge (Q20-Q33)
+            const basicPool = WORKSHEET_QUESTIONS.filter(function (q) { return q.level === "Basic Knowledge"; });
+            const advPool = WORKSHEET_QUESTIONS.filter(function (q) { return q.level === "Advanced Knowledge"; });
+            const pickedBasic = shuffleArray(basicPool).slice(0, 6);
+            const pickedAdv = shuffleArray(advPool).slice(0, 6);
+            return pickedBasic.concat(pickedAdv);
+        }
+
+        function switchScreen(screenId) {
+            const screens = ["screen-start", "screen-quiz", "screen-reveal", "screen-gameover", "screen-report"];
+            screens.forEach(function (id) {
+                const el = document.getElementById(id);
+                if (!el) return;
+                if (id === screenId) {
+                    el.classList.remove("hidden");
+                    el.classList.add("flex");
+                } else {
+                    el.classList.add("hidden");
+                    el.classList.remove("flex");
+                }
+            });
+            gameState.activeScreen = screenId;
+        }
+
+        function startGame() {
+            SFX.coin();
+            gameState.questions = buildQuestionDeck();
+            gameState.currentIndex = 0;
+            gameState.lives = 3;
+            gameState.score = 0;
+            gameState.correctCount = 0;
+            gameState.continuesUsed = 0;
+            gameState.isGameOverPending = false;
+            gameState.answeringLocked = false;
+
+            refreshAllAvatars();
+            updateLivesUI();
+            updateScoreUI();
+            switchScreen("screen-quiz");
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            clearInterval(gameState.timerInterval);
+            gameState.answeringLocked = false;
+
+            const q = gameState.questions[gameState.currentIndex];
+            const isAdvanced = q.level === "Advanced Knowledge";
+            const timeLimit = isAdvanced ? 20 : 25;
+
+            const quizHost = document.getElementById("quiz-host-avatar");
+            if (quizHost) quizHost.innerHTML = getHostAvatarHTML("normal");
+
+            // Level transition sound when entering Advanced Knowledge
+            if (gameState.currentIndex > 0 && gameState.questions[gameState.currentIndex - 1].level !== q.level) {
+                SFX.levelUp();
+            }
+
+            const badge = document.getElementById("hud-stage-badge");
+            if (badge) {
+                badge.textContent = isAdvanced ? "Advanced Knowledge (進階知識)" : "Basic Knowledge (基礎知識)";
+                badge.className = "font-tc font-black text-xs sm:text-sm px-2.5 py-0.5 rounded-lg " +
+                    (isAdvanced ? "bg-yellow-400 text-slate-950" : "bg-emerald-400 text-slate-950");
+            }
+
+            const qNum = document.getElementById("hud-q-num");
+            if (qNum) {
+                qNum.textContent = (gameState.currentIndex + 1) + "/" + gameState.questions.length;
+            }
+
+            const topicTag = document.getElementById("q-topic-tag");
+            const qTextEn = document.getElementById("q-text-en");
+            const qTextZh = document.getElementById("q-text-zh");
+            const stmtBox = document.getElementById("q-statements-box");
+
+            if (topicTag) topicTag.textContent = "Worksheet Q" + q.qNum + " • " + q.level;
+            if (qTextEn) qTextEn.textContent = q.qEn;
+            if (qTextZh) qTextZh.textContent = q.qZh;
+
+            gameState.currentHintVisible = gameState.globalBilingual;
+
+            // Render numbered statements (1)-(4) if present
+            if (stmtBox) {
+                if (q.statements && q.statements.length > 0) {
+                    stmtBox.classList.remove("hidden");
+                    stmtBox.innerHTML = q.statements.map(function (st) {
+                        return '<div class="flex items-start gap-2 text-sm sm:text-base">' +
+                            '<span class="font-bold text-yellow-300 shrink-0">' + st.num + '</span>' +
+                            '<div class="flex-1">' +
+                                '<span class="text-white font-semibold">' + st.en + '</span>' +
+                                '<span class="option-zh font-tc text-xs sm:text-sm text-cyan-200 ml-2 ' + (gameState.currentHintVisible ? '' : 'hidden') + '">(' + st.zh + ')</span>' +
+                            '</div>' +
+                        '</div>';
+                    }).join("");
+                } else {
+                    stmtBox.classList.add("hidden");
+                    stmtBox.innerHTML = "";
+                }
+            }
+
+            updateHintVisibility();
+
+            // Render A, B, C, D Option Buttons
+            const optionsContainer = document.getElementById("options-container");
+            if (optionsContainer) {
+                optionsContainer.innerHTML = "";
+                const labels = ["A", "B", "C", "D"];
+                q.options.forEach(function (opt, idx) {
+                    const btn = document.createElement("button");
+                    btn.type = "button";
+                    btn.className = "arcade-btn-option w-full text-left bg-slate-900/90 border-2 border-slate-600 rounded-xl p-3 sm:p-3.5 flex items-start gap-3 cursor-pointer";
+                    btn.innerHTML =
+                        '<span class="bg-yellow-400 text-slate-950 font-pixel text-xs sm:text-sm px-2.5 py-1.5 rounded-lg shrink-0 mt-0.5">' + labels[idx] + '</span>' +
+                        '<div class="flex-1">' +
+                            '<div class="text-sm sm:text-base font-extrabold text-white leading-snug">' + opt.en + '</div>' +
+                            '<div class="option-zh font-tc text-xs sm:text-sm text-cyan-200 mt-0.5 ' + (gameState.currentHintVisible ? '' : 'hidden') + '">' + opt.zh + '</div>' +
+                        '</div>';
+                    btn.addEventListener("click", function () {
+                        selectAnswer(idx);
+                    });
+                    optionsContainer.appendChild(btn);
+                });
+            }
+
+            gameState.timer = timeLimit;
+            updateTimerUI();
+            gameState.timerInterval = setInterval(function () {
+                gameState.timer--;
+                updateTimerUI();
+                if (gameState.timer <= 5 && gameState.timer > 0) {
+                    SFX.tick();
+                }
+                if (gameState.timer <= 0) {
+                    clearInterval(gameState.timerInterval);
+                    selectAnswer(-1);
+                }
+            }, 1000);
+        }
+
+        function selectAnswer(selectedIndex) {
+            if (gameState.answeringLocked) return;
+            gameState.answeringLocked = true;
+            clearInterval(gameState.timerInterval);
+
+            const q = gameState.questions[gameState.currentIndex];
+            const isCorrect = selectedIndex === q.correctIndex;
+            const labels = ["A", "B", "C", "D"];
+            const banner = document.getElementById("reveal-status-banner");
+            const revealHost = document.getElementById("reveal-host-avatar");
+            const revealCaption = document.getElementById("reveal-host-caption");
+
+            if (isCorrect) {
+                SFX.correct();
+                const timeBonus = Math.max(0, gameState.timer) * 5;
+                const earned = 100 + timeBonus;
+                gameState.score += earned;
+                gameState.correctCount++;
+                gameState.isGameOverPending = false;
+
+                if (revealHost) revealHost.innerHTML = getHostAvatarHTML("cheer");
+                if (revealCaption) revealCaption.textContent = "Mr Tsang 讚好！";
+                if (banner) {
+                    banner.className = "w-full max-w-2xl py-2.5 px-4 rounded-xl font-black text-base sm:text-2xl tracking-wide bg-emerald-500 text-slate-950 shadow-lg";
+                    banner.textContent = "✅ GOOD! 答對了！ (+" + earned + " PTS)";
+                }
+            } else {
+                SFX.wrong();
+                gameState.lives = Math.max(0, gameState.lives - 1);
+                updateLivesUI();
+
+                if (revealHost) revealHost.innerHTML = getHostAvatarHTML("wrong");
+                if (revealCaption) revealCaption.textContent = "Mr Tsang 鼓勵你！";
+
+                const card = document.getElementById("question-card");
+                if (card) {
+                    card.classList.add("animate-shake");
+                    setTimeout(function () {
+                        card.classList.remove("animate-shake");
+                    }, 400);
+                }
+
+                if (banner) {
+                    banner.className = "w-full max-w-2xl py-2.5 px-4 rounded-xl font-black text-base sm:text-2xl tracking-wide bg-red-600 text-white shadow-lg";
+                    banner.textContent = selectedIndex === -1
+                        ? "⏰ TIME'S UP! 時間到！ (-1 ❤️)"
+                        : "❌ WRONG! 答錯了！ (-1 ❤️)";
+                }
+
+                gameState.isGameOverPending = gameState.lives <= 0;
+            }
+
+            updateScoreUI();
+
+            const correctOption = q.options[q.correctIndex];
+            const revEn = document.getElementById("reveal-correct-en");
+            const revZh = document.getElementById("reveal-correct-zh");
+            const expEn = document.getElementById("reveal-exp-en");
+            const expZh = document.getElementById("reveal-exp-zh");
+            const nextBtn = document.getElementById("btn-next-step");
+
+            if (revEn) revEn.textContent = labels[q.correctIndex] + ". " + correctOption.en;
+            if (revZh) revZh.textContent = "Worksheet Q" + q.qNum + " 正確答案：" + correctOption.zh;
+            if (expEn) expEn.textContent = q.expEn;
+            if (expZh) expZh.textContent = q.expZh;
+
+            if (nextBtn) {
+                if (gameState.isGameOverPending) {
+                    nextBtn.textContent = "查看結果 (CHECK STATUS) ▶";
+                } else if (gameState.currentIndex >= gameState.questions.length - 1) {
+                    nextBtn.textContent = "🎓 領取成績單 (VIEW RESULTS) ▶";
+                } else {
+                    nextBtn.textContent = "下一題 NEXT QUESTION ▶";
+                }
+            }
+
+            switchScreen("screen-reveal");
+        }
+
+        function nextQuestion() {
+            if (gameState.isGameOverPending) {
+                const q = gameState.questions[gameState.currentIndex];
+                const goStage = document.getElementById("go-stage");
+                const goScore = document.getElementById("go-score");
+                if (goStage) goStage.textContent = "Worksheet Q" + q.qNum + " (" + q.level + ")";
+                if (goScore) goScore.textContent = gameState.score;
+                switchScreen("screen-gameover");
+                return;
+            }
+
+            if (gameState.currentIndex >= gameState.questions.length - 1) {
+                showFinalReport(false);
+                return;
+            }
+
+            gameState.currentIndex++;
+            switchScreen("screen-quiz");
+            loadQuestion();
+        }
+
+        function continueGame() {
+            SFX.coin();
+            gameState.lives = 3;
+            gameState.continuesUsed++;
+            gameState.isGameOverPending = false;
+            updateLivesUI();
+
+            if (gameState.currentIndex >= gameState.questions.length - 1) {
+                showFinalReport(false);
+            } else {
+                gameState.currentIndex++;
+                switchScreen("screen-quiz");
+                loadQuestion();
+            }
+        }
+
+        function showFinalReport(endedEarly) {
+            if (!endedEarly) SFX.levelUp();
+
+            const accuracy = Math.round((gameState.correctCount / gameState.questions.length) * 100);
+
+            let grade = "C";
+            if (!endedEarly && accuracy >= 90 && gameState.continuesUsed === 0) grade = "S";
+            else if (!endedEarly && accuracy >= 75) grade = "A";
+            else if (accuracy >= 50) grade = "B";
+
+            let rankTitle = "🎓 榮譽畢業生！";
+            let rankSub = "S2 Module 2.1: Overcoming Growth Challenges — Learning Point 1";
+
+            if (endedEarly) {
+                rankTitle = "📘 階段溫習報告 (繼續加油！)";
+                rankSub = "Review the S2 Module 2.1 bilingual vocabulary bank below!";
+            } else if (gameState.continuesUsed > 0) {
+                rankTitle = "🎓 挑戰完成 (毅力可嘉！)";
+                rankSub = "Completed with Resilience! Review the key vocabulary below.";
+            }
+
+            const elGrade = document.getElementById("report-grade");
+            const elTitle = document.getElementById("report-rank-title");
+            const elSub = document.getElementById("report-rank-subtitle");
+            const elScore = document.getElementById("report-score");
+            const elAcc = document.getElementById("report-accuracy");
+            const elCont = document.getElementById("report-continues");
+
+            if (elGrade) elGrade.textContent = grade;
+            if (elTitle) elTitle.textContent = rankTitle;
+            if (elSub) elSub.textContent = rankSub;
+            if (elScore) elScore.textContent = gameState.score;
+            if (elAcc) elAcc.textContent = accuracy + "%";
+            if (elCont) elCont.textContent = gameState.continuesUsed;
+
+            const grid = document.getElementById("vocab-bank-grid");
+            if (grid) {
+                grid.innerHTML = "";
+                VOCABULARY_BANK.forEach(function (item) {
+                    const card = document.createElement("div");
+                    card.className = "bg-slate-900/90 border border-emerald-500/30 rounded-xl p-3 text-left";
+                    card.innerHTML =
+                        '<div class="flex items-center justify-between gap-2">' +
+                            '<span class="font-extrabold text-cyan-300 text-sm">' + item.en + '</span>' +
+                            '<span class="font-tc font-bold text-yellow-300 text-xs bg-emerald-950 px-2 py-0.5 rounded">' + item.zh + '</span>' +
+                        '</div>' +
+                        '<p class="text-xs text-slate-300 mt-1 leading-relaxed">' + item.def + '</p>';
+                    grid.appendChild(card);
+                });
+            }
+
+            refreshAllAvatars();
+            switchScreen("screen-report");
+        }
+
+        function resetToTitle() {
+            clearInterval(gameState.timerInterval);
+            refreshAllAvatars();
+            switchScreen("screen-start");
+        }
+
+        // 5. UI HELPERS & TOGGLES
+        function updateLivesUI() {
+            const hearts = "❤️".repeat(Math.max(0, gameState.lives)) + "🖤".repeat(Math.max(0, 3 - gameState.lives));
+            const el = document.getElementById("hud-lives");
+            if (el) el.textContent = hearts;
+        }
+
+        function updateScoreUI() {
+            const el = document.getElementById("hud-score");
+            if (el) el.textContent = String(gameState.score).padStart(4, "0");
+        }
+
+        function updateTimerUI() {
+            const el = document.getElementById("hud-timer");
+            if (!el) return;
+            el.textContent = String(Math.max(0, gameState.timer)).padStart(2, "0");
+            if (gameState.timer <= 5) {
+                el.className = "font-pixel text-sm sm:text-base text-red-400 animate-pulse";
+            } else {
+                el.className = "font-pixel text-sm sm:text-base text-emerald-400";
+            }
+        }
+
+        function toggleBilingual() {
+            gameState.globalBilingual = !gameState.globalBilingual;
+            gameState.currentHintVisible = gameState.globalBilingual;
+            const statusEl = document.getElementById("bilingual-status");
+            if (statusEl) {
+                statusEl.textContent = gameState.globalBilingual ? "ON" : "HINT ONLY";
+            }
+            updateHintVisibility();
+        }
+
+        function toggleHint() {
+            gameState.currentHintVisible = !gameState.currentHintVisible;
+            updateHintVisibility();
+        }
+
+        function updateHintVisibility() {
+            const qZh = document.getElementById("q-text-zh");
+            const optZhs = document.querySelectorAll(".option-zh");
+            if (qZh) {
+                if (gameState.currentHintVisible) qZh.classList.remove("hidden");
+                else qZh.classList.add("hidden");
+            }
+            optZhs.forEach(function (el) {
+                if (gameState.currentHintVisible) el.classList.remove("hidden");
+                else el.classList.add("hidden");
+            });
+        }
+
+        function toggleCRT() {
+            const crt = document.getElementById("crt-layer");
+            if (crt) crt.classList.toggle("hidden");
+        }
+
+        function toggleSound() {
+            SFX.muted = !SFX.muted;
+            const btn = document.getElementById("toggle-sound");
+            if (btn) {
+                btn.textContent = SFX.muted ? "🔇 MUTE" : "🔊 SFX";
+            }
+        }
+
+        // Keyboard Shortcuts (Enter / Space for Start & Next, 1-4 or A-D for Options)
+        document.addEventListener("keydown", function (e) {
+            const key = e.key.toLowerCase();
+            if (gameState.activeScreen === "screen-start" && (key === "enter" || key === " ")) {
+                e.preventDefault();
+                startGame();
+            } else if (gameState.activeScreen === "screen-reveal" && (key === "enter" || key === " ")) {
+                e.preventDefault();
+                nextQuestion();
+            } else if (gameState.activeScreen === "screen-quiz" && !gameState.answeringLocked) {
+                const q = gameState.questions[gameState.currentIndex];
+                if (!q) return;
+                const map = { "1": 0, "a": 0, "2": 1, "b": 1, "3": 2, "c": 2, "4": 3, "d": 3 };
+                if (Object.prototype.hasOwnProperty.call(map, key)) {
+                    const idx = map[key];
+                    if (idx < q.options.length) {
+                        e.preventDefault();
+                        selectAnswer(idx);
+                    }
+                }
+            }
+        });
+
+        // Initial Boot
+        refreshAllAvatars();
+    </script>
+</body>
+</html>
